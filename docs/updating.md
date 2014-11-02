@@ -1,0 +1,6 @@
+##Updating
+
+Composer
+```
+composer update
+```
