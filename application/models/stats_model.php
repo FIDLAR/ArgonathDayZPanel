@@ -18,9 +18,9 @@ class stats_model
 		$query = $this->database->prepare("SELECT MAX(character_data.KillsZ) as KillsZ, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;")
 		$raw = $query->execute();
 
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'Kills' => $data['KillsZ']
@@ -38,9 +38,9 @@ class stats_model
 	{
 		$query = $this->database->prepare("SELECT MAX(character_data.HeadshotsZ) as Headshots, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;")
 		$raw = $query->execute();
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'Headshots' => $data['Headshots']
@@ -57,9 +57,9 @@ class stats_model
 	{
 		$query = $this->database->prepare("SELECT MAX(character_data.KillsH) as Kills, player_data.PlayerName AS PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;");
 		$raw = $query->execute();
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'Kills' => $data['Kills']
@@ -76,9 +76,9 @@ class stats_model
 	{
 		$query = $this->database->prepare("SELECT MAX(character_data.KillsB) as Kills, player_data.PlayerName AS PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;");
 		$raw = $query->execute();
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'Kills' => $data['Kills']
@@ -95,9 +95,9 @@ class stats_model
 	{
 		$query = $this->database->prepare("SELECT MAX(character_data.Duration) as LifeSpan, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;")
 		$raw = $query->execute();
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'LifeSpan' => $data['LifeSpan']
@@ -114,9 +114,9 @@ class stats_model
 	{
 		$query = $this->database->prepare("SELECT MAX(character_data.Generation) as Lifes, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;")
 		$raw = $query->execute();
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'Lifes' => $data['Lifes']
@@ -133,9 +133,9 @@ class stats_model
 	{
 		$query = $this->database->prepare("SELECT MAX(character_data.DistanceFoot) as Km, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 LIMIT 1;")
 		$raw = $query->execute();
-		if ($raw->rowCount() > 0)
+		if ($query->rowCount() > 0)
 		{
-			$data = $raw->fetch(PDO::FETCH_ASSOC);
+			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
 				'Name' => $data['PlayerName'],
 				'Distance' => $data['Km']

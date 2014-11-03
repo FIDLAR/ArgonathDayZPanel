@@ -1,0 +1,16 @@
+{% extends "_templates/layout.twig" %}
+
+{% block content %}
+	
+	<li>Zombie Kills: {{ zStat.Kills }}</li>
+	<li>Headshots: {{ zStat.Headshots }}</li>
+	<li>Humanity: {{ hStat }}</li>
+	<li>Ran: {{ lStat.Distance/1000 }}km</li>
+	<li>LifeSpan: {{ lStat.Duration/60}} hours</li>
+	<li>Attempt: {{ lStat.Attempt }}</li>
+	<li>Murders: {{ kStat.Suvivors }}</li>
+	<li>Bandits: {{ kStat.Bandits }}</li>
+
+	{# this is basic... to be redesigned once front-end werk is done #}
+	
+{% endblock %}
