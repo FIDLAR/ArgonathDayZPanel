@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Information -->
+		<title>{{ constant('SITE_NAME') }}</title>
+		<!-- META -->
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+
+		<link rel="icon" type="image/png" href="favicon.ico">
+
+		<!-- CSS -->
+		<link rel="stylesheet" href="{{ constant('BASE_URL') }}public/css/base.css">
+
+	</head>
+	<body>
+	
+		<!-- Content -->
+		{% block content %} {% endblock %}
+
+		<!-- JavaScript -->
+		<script src="{{ constant('BASE_URL') }}public/js/jquery.js"></script>
+	</body>	
+</html>
