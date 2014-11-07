@@ -1,0 +1,20 @@
+{% extends "_templates/layout.twig" %}
+
+{% block content %}
+	
+	<p>Group statistics for the faction "{{ page.name }}".</p>
+
+	<b>Members</b>
+	<ul>
+		{% for member in zMember %}
+			<li><a href="{{ constant('BASE_URL') }}view/player/{{ member }}">{{ member }}</a></li>
+		{% endfor %}
+	</ul>
+
+	<b>Statistics</b>
+	<ul>
+		<li>Zombie Kills: {{ zStat }}</li>
+	</ul>
+	
+	
+{% endblock %}

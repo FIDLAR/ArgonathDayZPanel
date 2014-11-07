@@ -12,13 +12,25 @@
 		<link rel="icon" type="image/png" href="favicon.ico">
 
 		<!-- CSS -->
-		<link rel="stylesheet" href="{{ constant('BASE_URL') }}public/css/base.css">
+		<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}public/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ constant('BASE_URL') }}public/css/site.css">
 
 	</head>
 	<body>
 	
 		<!-- Content -->
-		{% block content %} {% endblock %}
+		<div class="container">
+			<div class="header">
+		        <ul class="nav nav-pills pull-right" role="tablist">
+		          <li role="presentation"><a href="{{ constant('BASE_URL') }}">Home</a></li>
+		          <li role="presentation"><a href="{{ constant('BASE_URL') }}view/groups/">Groups</a></li>
+		        </ul>
+		        <h3 class="text-muted">{{ page.name|default('ArgonathRPG DayZ') }}</h3>
+		    </div>
+		    <div class="well well-lg">
+				{% block content %} {% endblock %}
+			</div>
+		</div>
 
 		<!-- JavaScript -->
 		<script src="{{ constant('BASE_URL') }}public/js/jquery.js"></script>
