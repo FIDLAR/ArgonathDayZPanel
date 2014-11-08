@@ -5,16 +5,57 @@
 	<p>Group statistics for the faction "{{ page.name }}".</p>
 
 	<b>Members</b>
+
 	<ul>
+
 		{% for member in zMember %}
+
 			<li><a href="{{ constant('BASE_URL') }}view/player/{{ member }}">{{ member }}</a></li>
+
 		{% endfor %}
+
 	</ul>
 
-	<b>Statistics</b>
-	<ul>
-		<li>Zombie Kills: {{ zStat }}</li>
-	</ul>
-	
+	<div class="row">
+
+		<p>Collective statistics are based on current lifes.</p>
+
+		<div class="col-md-6">
+
+			<b>Collective Statistics</b>
+
+			<ul>
+
+				<li>Zed Kills: {{ zStat.kills }}</li>
+
+				<li>Headshots: {{ zStat.headshots }}</li>
+
+				<li>Suvivors Killed: {{ pStat.suvivors }}</li>
+
+				<li>Bandits Killed: {{ pStat.bandits }}</li>
+
+			</ul>
+
+		</div>
+
+		<div class="col-md-6">
+
+			<b>Average Statistics</b>
+
+			<ul>
+
+				<li>Humanity: {{ hStat }}</li>
+
+				<li>Distance on Foot: {{ lStat.distance|round }}km</li>
+
+				<li>LifeSpan: {{ lStat.duration|round(1, 'common') }} hours</li>
+
+				<li>Attempt: {{ lStat.attempt|round(1, 'common') }}</li>
+
+			</ul>
+
+		</div>
+
+	</div> <!-- / row -->
 	
 {% endblock %}

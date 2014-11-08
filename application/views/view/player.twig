@@ -2,14 +2,18 @@
 
 {% block content %}
 	
-	<li>Zombie Kills: {{ zStat.Kills }}</li>
-	<li>Headshots: {{ zStat.Headshots }}</li>
-	<li>Humanity: {{ hStat }}</li>
-	<li>Ran: {{ lStat.Distance/1000 }}km</li>
-	<li>LifeSpan: {{ lStat.Duration/60}} hours</li>
-	<li>Attempt: {{ lStat.Attempt }}</li>
-	<li>Murders: {{ kStat.Suvivors }}</li>
-	<li>Bandits: {{ kStat.Bandits }}</li>
+	<b>Current Life Statistic</b>
+	<ul>
+		<li>Zombie Kills: {{ zStat.Kills }}</li>
+		<li>Headshots: {{ zStat.Headshots }}</li>
+		<li>Humanity: {{ hStat }}</li>
+		<li>Distance on Foot: {{ lStat.Distance|round(1, 'common') }}km</li>
+		<li>LifeSpan: {{ lStat.Duration|round(1, 'common') }} hours</li>
+		<li>Attempt: {{ lStat.Attempt }}</li>
+		<li>Survivors Killed: {{ kStat.Suvivors }}</li>
+		<li>Bandits Killed: {{ kStat.Bandits }}</li>
+	</ul>
+	
 
 	{# this is basic... to be redesigned once front-end werk is done #}
 	

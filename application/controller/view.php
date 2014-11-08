@@ -34,6 +34,9 @@ class view extends Controller
 
 			$this->display('view/player',
 				array(
+					'page' => array(
+						'name' => (($humanity>=5000) ? 'Hero':'' . (($humanity<=-5000) ? 'Bandit':'Survivor') . '') . ' ' . ucfirst($name)
+						),
 					'zStat' => $zombie_stats,
 					'hStat' => $humanity,
 					'lStat' => $life_stats,
@@ -56,8 +59,11 @@ class view extends Controller
 			$group_model = $this->model("group_model");
 			$group_model->loadSquad($url);
 
-			$group_kills = $group_model->getSquadKills();
+			$group_kills = $group_model->getSquadZombieStats();
 			$group_members = $group_model->getMembers();
+			$group_humanity = $group_model->getSquadHumanityAverage();
+			$group_pvp = $group_model->getSquadPVPStats();
+			$group_life = $group_model->getSquadLifeStats();
 
 			$this->display('view/group',
 				array(
@@ -65,7 +71,10 @@ class view extends Controller
 						'name' => 'Faction: ' . ucfirst($name)
 						),
 					'zStat' => $group_kills,
-					'zMember' => $group_members
+					'zMember' => $group_members,
+					'pStat' => $group_pvp,
+					'hStat' => $group_humanity,
+					'lStat' => $group_life
 					)
 				);
 		}

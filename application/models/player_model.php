@@ -80,8 +80,8 @@ class player_model
 		{
 			$data = $query->fetch(PDO::FETCH_ASSOC);
 			return array(
-				'Distance' => $data['DistanceFoot'],
-				'Duration' => $data['Duration'],
+				'Distance' => $data['DistanceFoot']/1000,
+				'Duration' => $data['Duration']/60,
 				'Attempt' => $data['Generation']
 				);
 		}
