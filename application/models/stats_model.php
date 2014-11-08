@@ -15,7 +15,7 @@ class stats_model
 	// Rank: Slayer
 	public function getMostZombieKills()
 	{
-		$query = $this->database->prepare("SELECT character_data.KillsZ as KillsZ, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (character_data.PlayerUID = player_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.KillsZ = (SELECT MAX(character_data.KillsZ) FROM character_data) LIMIT 5;")
+		$query = $this->database->prepare("SELECT character_data.KillsZ as KillsZ, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (character_data.PlayerUID = player_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.KillsZ = (SELECT MAX(character_data.KillsZ ) FROM character_data WHERE Alive = 1) LIMIT 1;")
 		$raw = $query->execute();
 
 		if ($query->rowCount() > 0)
@@ -36,7 +36,7 @@ class stats_model
 	// Rank: Headhunter
 	public function getMostHeadshots()
 	{
-		$query = $this->database->prepare("SELECT character_data.HeadshotsZ as Headshots, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.Headshots = (SELECT MAX(character_data.Headshots) FROM character_data) LIMIT 1;")
+		$query = $this->database->prepare("SELECT character_data.HeadshotsZ as Headshots, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.HeadshotsZ = (SELECT MAX(character_data.HeadshotsZ) FROM character_data WHERE Alive = 1) LIMIT 1;")
 		$raw = $query->execute();
 		if ($query->rowCount() > 0)
 		{
@@ -93,7 +93,7 @@ class stats_model
 	// Rank: I don't wanna die!
 	public function getMostLife()
 	{
-		$query = $this->database->prepare("SELECT character_data.Duration as LifeSpan, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.Duration = (SELECT MAX(character_data.Duration) FROM character_data) LIMIT 1;")
+		$query = $this->database->prepare("SELECT character_data.Duration as LifeSpan, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.Duration = (SELECT MAX(character_data.Duration) FROM character_data WHERE Alive = 1) LIMIT 1;")
 		$raw = $query->execute();
 		if ($query->rowCount() > 0)
 		{
@@ -112,7 +112,7 @@ class stats_model
 	// Rank: Deadweight
 	public function getMostDeaths()
 	{
-		$query = $this->database->prepare("SELECT character_data.Generation as Lifes, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.Generation = (SELECT MAX(character_data.Generation) FROM character_data) LIMIT 1;")
+		$query = $this->database->prepare("SELECT character_data.Generation as Lifes, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.Generation = (SELECT MAX(character_data.Generation) FROM character_data WHERE Alive = 1) LIMIT 1;")
 		$raw = $query->execute();
 		if ($query->rowCount() > 0)
 		{
@@ -131,7 +131,7 @@ class stats_model
 	// Rank: Olympic Stride
 	public function getLongestFootDistance()
 	{
-		$query = $this->database->prepare("SELECT character_data.DistanceFoot as Lifes, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.DistanceFoot = (SELECT MAX(character_data.DistanceFoot) FROM character_data) LIMIT 1;")
+		$query = $this->database->prepare("SELECT character_data.DistanceFoot as Lifes, player_data.PlayerName as PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.DistanceFoot = (SELECT MAX(character_data.DistanceFoot) FROM character_data WHERE Alive = 1) LIMIT 1;")
 		$raw = $query->execute();
 		if ($query->rowCount() > 0)
 		{
