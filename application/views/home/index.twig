@@ -2,6 +2,88 @@
 
 {% block content %}
 	
-	<p>Home</p>
+	<ul class="list-group">
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">Zombie Slayer</h5>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.slayer.Name }}">{{ ranks.slayer.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.slayer.Kills }} kills</span>
+
+		</li>
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">HeadHunter</h4>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.headHunter.Name }}">{{ ranks.headHunter.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.headHunter.Headshots }} headshots</span>
+
+		</li>
+
+		{% if ranks.serialKiller.Name %}
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">Serial Killer</h4>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.serialKiller.Name }}">{{ ranks.serialKiller.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.serialKiller.Kills }} kills</span>
+
+		</li>
+
+		{% endif %}
+
+		{% if ranks.banditHunter.Name %}
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">Bandit Hunter</h4>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.banditHunter.Name }}">{{ ranks.banditHunter.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.banditHunter.Kills }} kills</span>
+
+		</li>
+
+		{% endif %}
+
+		{# Serial Killer / Bandit Hunter can be empty #}
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">I don't wanna die!</h4>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.longestLife.Name }}">{{ ranks.longestLife.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.longestLife.LifeSpan|round(1, 'common') }} hours</span>
+
+		</li>
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">Deadweight</h4>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.deadweight.Name }}">{{ ranks.deadweight.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.deadweight.Lifes }} attempts</span>
+
+		</li>
+
+		<li class="list-group-item">
+
+			<h4 class="list-group-item-heading">Olympic Stride</h4>
+
+			<a class="btn btn-info btn-xs" style="width:150px;" href="{{ constant('BASE_URL') }}view/player/{{ ranks.olympic.Name }}">{{ ranks.olympic.Name }}</a>
+
+			<span class="badge bgcolor-red">{{ ranks.olympic.Distance|round(1, 'common') }}km ran</span>
+
+		</li>
+
+	</ul>
 
 {% endblock %}

@@ -43,9 +43,9 @@ class view extends Controller
 					'kStat' => $kill_stats
 					)
 				);
-
 		}
 	}
+
 	public function user($name)
 	{
 		$this->player($name);
@@ -91,7 +91,6 @@ class view extends Controller
 				)
 			);
 	}
-
 }
 
 ?>

@@ -82,3 +82,18 @@ html, body {
     border-bottom: 0;
   }
 }
+
+/* Color from Bootstrap's *-danger */
+.bgcolor-red { 
+	background-color: #d9534f;
+}
+
+/* Color from Bootstrap's *-info */
+.bgcolor-blue {
+	background-color: #31b0d5;
+}
+
+/* Color from Bootstrap's *-success*/
+.bgcolor-green { 
+	background-color: #5cb85c;
+}
