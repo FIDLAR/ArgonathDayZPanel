@@ -55,7 +55,7 @@ class stats_model
 	// Rank: Serial Killer
 	public function getMostSurvivorKills()
 	{
-		$query = $this->database->prepare("SELECT character_data.KillsH as Kills, player_data.PlayerName AS PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.KillsH = (SELECT MAX(character_data.KillsH) FROM character_data WHERE character_data.Alive = 1) LIMIT 1;");
+		$query = $this->database->prepare("SELECT character_data.KillsH as Kills, player_data.PlayerName AS PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.KillsH = (SELECT MAX(character_data.KillsH) FROM character_data WHERE character_data.Alive = 1) LIMIT 1;");
 		$raw = $query->execute();
 		if ($query->rowCount() > 0)
 		{
@@ -74,7 +74,7 @@ class stats_model
 	// Rank: Bandit Hunter
 	public function getMostBanditKills()
 	{
-		$query = $this->database->prepare("SELECT character_data.KillsB as Kills, player_data.PlayerName AS PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.KillsB = (SELECT MAX(character_data.KillsB) FROM character_data WHERE character_data.Alive = 1) LIMIT 1;");
+		$query = $this->database->prepare("SELECT character_data.KillsB as Kills, player_data.PlayerName AS PlayerName FROM character_data LEFT JOIN player_data ON (player_data.PlayerUID = character_data.PlayerUID) WHERE character_data.Alive = 1 AND character_data.KillsB = (SELECT MAX(character_data.KillsB) FROM character_data WHERE character_data.Alive = 1) LIMIT 1;");
 		$raw = $query->execute();
 		if ($query->rowCount() > 0)
 		{
