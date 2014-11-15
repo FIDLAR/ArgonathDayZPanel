@@ -30,6 +30,21 @@ class player_model
 		}
 	}
 
+	public function getName($PlayerUID)
+	{
+		$query = $this->database->prepare("SELECT PlayerName FROM player_data WHERE PlayerUID = ?;");
+		$raw = $query->execute(array($PlayerUID));
+		if ($query->rowCount() > 0)
+		{
+			$data = $query->fetch(PDO::FETCH_ASSOC);
+			return $data['PlayerName'];
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 	/**
 	 * Get the player's statistics for zombie kills.
 	 */

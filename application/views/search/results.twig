@@ -1,0 +1,21 @@
+{% extends "_templates/layout.twig" %}
+
+{% block content %}
+	
+	<div class="alert alert-info">
+
+		<strong>Argonath DayZ Suvivor Index</strong>
+
+	</div>
+
+	<ul>
+
+		{% for player in results %}
+
+			<li><a href="{{ constant('BASE_URL') }}view/uid/{{ player.PlayerUID }}">{{ player.PlayerName }}</a></li>
+
+		{% endfor %}
+
+	</ul>
+	
+{% endblock %}

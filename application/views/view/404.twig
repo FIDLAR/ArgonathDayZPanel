@@ -1,0 +1,14 @@
+{% extends "_templates/layout.twig" %}
+
+{% block content %}
+	
+	<div class="alert alert-danger">
+
+		<strong>404 - Not Found</strong><br />
+
+	</div>
+
+	<p>Sorry, the player or group you are looking for couldn't be located in our index.</p>
+	<small>Search String: <span class="text-danger">{{ find }}</span></small>
+	
+{% endblock %}

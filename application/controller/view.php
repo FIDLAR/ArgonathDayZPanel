@@ -51,6 +51,42 @@ class view extends Controller
 		$this->player($name);
 	}
 
+	public function uid($playerUID)
+	{
+		$player_model = $this->model("player_model");
+
+		$name = $player_model->getName($playerUID);
+
+		if (!$name)
+		{
+			$this->display('view/404', array(
+				'page' => array(
+					'name' => 'Argonath DayZ - Not Found'
+					),
+				'find' => $playerUID
+				));
+		}
+		else
+		{
+			$zombie_stats = $player_model->getZombieStats($playerUID);
+			$humanity = $player_model->getHumanity($playerUID);
+			$life_stats = $player_model->getLifeStats($playerUID);
+			$kill_stats = $player_model->getPlayerKillStatus($playerUID);
+
+			$this->display('view/player',
+				array(
+					'page' => array(
+						'name' => (($humanity>=5000) ? 'Hero':'' . (($humanity<=-5000) ? 'Bandit':'Survivor') . '') . ' ' . ucfirst($name)
+						),
+					'zStat' => $zombie_stats,
+					'hStat' => $humanity,
+					'lStat' => $life_stats,
+					'kStat' => $kill_stats
+					)
+				);
+		}
+	}
+
 	public function group($name)
 	{
 		$url = $this->groups[$name]['url'];

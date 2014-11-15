@@ -24,9 +24,18 @@
 		        <ul class="nav nav-pills pull-right" role="tablist">
 		          <li role="presentation"><a href="{{ constant('BASE_URL') }}">Home</a></li>
 		          <li role="presentation"><a href="{{ constant('BASE_URL') }}view/groups/">Groups</a></li>
+		          <li role="presentation">
+		          	<form action="{{ constant('BASE_URL') }}search/index/" method="GET">
+		          		<input class="form-control input-sm" type="text" name="input_name" placeholder="Search" />
+		          	</form>
+		          </li>
 		        </ul>
-		        <h3 class="text-muted">{{ page.name|default('ArgonathRPG DayZ') }}</h3>
+		        <h3 class="text-muted">{{ page.name|default('Argonath DayZ') }}</h3>
 		    </div>
+		    <div class="alert alert-info">
+		    	<strong>Alpha Version</strong><br />
+		    	This site may encounter unexpected errors. Please report them immediately to [WS]Teddy.
+		    	</div>
 		    <div class="well well-lg">
 				{% block content %} {% endblock %}
 			</div>
