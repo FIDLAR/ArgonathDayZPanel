@@ -1,6 +1,0 @@
-##Updating
-
-Composer
-```
-composer update
-```
