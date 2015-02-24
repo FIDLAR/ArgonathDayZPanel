@@ -16,6 +16,7 @@ var validator 		= require('validator');
 var morgan 		= require('morgan');
 var fs 			= require('fs');
 var txt			= require('./helpers/text.js');
+var sanitize 		= require('sanitize-caja');
 
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
 
@@ -38,7 +39,8 @@ app.locals.name = "DayZ Panel";
 app.locals.year = moment().year();
 var Staff = Array(
 	76561198020571124, // Teddy
-	76561197983293052 // Chase
+	76561197983293052, // Chase
+	76561198015523313 // African
 );
 
 var connection = mysql.createConnection(secretConf.connection);
@@ -94,6 +96,9 @@ hbs.registerHelper('formatTime', function(oldTime) {
 	return new hbs.SafeString(
 		moment(oldTime).format("MMMM Do YYYY @ h:mm:ss a")
 	);
+});
+hbs.registerHelper('cleanHTML', function(data) {
+	return sanitize(data);
 });
 
 app.get('/', function(req, res) {
@@ -332,7 +337,6 @@ app.get('/map', loggedIn, function(req, res) {
 
 });
 app.get('/clans', loggedIn, function(req, res) {
-
 	connection.query("SELECT Player_DATA.PlayerName as PlayerName, clans.Name as ClanName, clans.id as ClanID, Player_DATA.PlayerUID as PlayerUID FROM clans LEFT JOIN Player_DATA ON (clans.FounderUID = Player_DATA.PlayerUID)", function(err, rows){
 		if (err) {
 			console.log("Query Error: " + err);
@@ -348,7 +352,31 @@ app.get('/clans', loggedIn, function(req, res) {
 			});
 		}
 	});
-
+});
+app.get('/clan/:id', loggedIn, function(req, res){
+	connection.query("SELECT Player_DATA.PlayerName as PlayerName, clans.Name as ClanName, clans.id as ClanID, Player_DATA.PlayerUID as PlayerUID FROM clans LEFT JOIN Player_DATA ON (clans.FounderUID = Player_DATA.PlayerUID) WHERE id = " + connection.escape(req.params.id) + " LIMIT 1;", function(err, rows){
+		if (err) {
+			console.log("Query Error: " + err);
+			res.render('application/error', {
+				code: 500,
+				message: txt.errors.error,
+				user: req.user
+			});
+		} else {
+			res.render('clans/clan', {
+				clan: rows[0],
+				user: req.user
+			});
+		}
+	});
+});
+app.get('/clan/create', loggedIn, function(req, res) {
+	res.render('clans/create' {
+		user: req.user
+	});
+});
+app.post('/clan/create', loggedIn, function(req, res) {
+	
 });
 
 /**
@@ -395,13 +423,4 @@ var server = app.listen(port, function() {
 function loggedIn(req, res, next) {
 	if (req.isAuthenticated()) { return next(); }
 	res.redirect('/login');
-}
-
-function isSiteStaff(req, res, next) {
-	if (req.isAuthenticated) {
-		if (validator.isin(req.user._json.response.players.steamid, Staff)) {
-			return next();
-		}
-	}
-	res.redirect('/401');
 }
