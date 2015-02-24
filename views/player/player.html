@@ -1,0 +1,73 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card-panel grey lighten-5 z-depth-1">
+			<div class="row valign-wrapper">
+				<div class="col s2">
+					<img src="{{player.response.players.0.avatarfull}}" class="circle border responsive-img">
+				</div>
+				<div class="col s10">
+					<h3 class="black-text">
+						{{player.response.players.0.personaname}}
+					</h3>
+					<strong>In-Game Name:</strong> {{db.Name}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s6">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-3">Current Statistics</span>
+				<table class="bordered">
+					<thead>
+						<tr>
+							<th>Stat</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Murders</td>
+							<td>{{db.Murders}}</td>
+						</tr>
+						<tr>
+							<td>Bounties</td>
+							<td>{{db/Bandits}}</td>
+						</tr>
+						<tr>
+							<td>Zombies Killed</td>
+							<td>{{db.Zombies}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col s6">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-3">Player Statistics</span>
+				<table class="bordered">
+					<thead>
+						<tr>
+							<th>Stat</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Last In-Game</td>
+							<td>{{{formatTime db.LastLogin}}}</td>
+						</tr>
+						<tr>
+							<td>Humanity</td>
+							<td>{{db.Humanity}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

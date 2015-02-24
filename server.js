@@ -12,22 +12,34 @@ var secretConf		= require('./hidden/secret.js');
 var SteamStrategy	= require('passport-steam').Strategy;
 var mysql      		= require('mysql');
 var http		= require('http');
+var validator 		= require('validator');
+var morgan 		= require('morgan');
+var fs 			= require('fs');
+var txt			= require('./helpers/text.js');
+
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('assets'));
 app.use(cookieParser());
-app.use(session({ secret: 'csdbf7sgf89sdgf78sdgf89gsd89fg89sd' } )); 
+app.use(session({ secret: secretConf.session.key } )); 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(morgan('short', {stream: accessLogStream}));
 app.set('view engine', 'hbs');
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 hbs.localsAsTemplateData(app);
 
+/** Variables and Stuff **/
 app.locals.name = "DayZ Panel";
 app.locals.year = moment().year();
+var Staff = Array(
+	76561198020571124, // Teddy
+	76561197983293052 // Chase
+);
 
 var connection = mysql.createConnection(secretConf.connection);
 connection.connect(function(err) {
@@ -141,7 +153,7 @@ app.get('/player/:id', function(req, res) {
 		reply.on('error', function(err) {
 			res.render('application/error', {
 				code: 500,
-				message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+				message: txt.errors.error
 			});
 		});
 	});
@@ -152,7 +164,7 @@ app.get('/players/find/name/:name', function(req, res) {
 			console.log("Query Error: " + err);
 			res.render('application/error', {
 				code: 500,
-				message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+				message: txt.errors.error
 			});
 		} else {
 			res.render('player/players', {
@@ -164,14 +176,13 @@ app.get('/players/find/name/:name', function(req, res) {
 
 });
 app.get('/players/find/humanity/:md/:humanity/', function(req, res){
-	console.log(req.params);
-	if (req.params.md == 'g' || req.params.md == 'greater') {
+	if (validator.equals(req.params.md, 'g')||validator.equals(req.params.md, 'greater')) {
 		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE Humanity > ' + connection.escape(req.params.humanity) + ' AND Alive = 1 ORDER BY Humanity DESC LIMIT 50;', function(err, rows) {
 			if (err) {
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+					message: txt.errors.error
 				});
 			} else {
 				res.render('player/players', {
@@ -180,13 +191,13 @@ app.get('/players/find/humanity/:md/:humanity/', function(req, res){
 				});
 			}
 		});
-	} else if (req.params.md == 'l' || req.params.md == 'less') {
+	} else if (validator.equals(req.params.md, 'l')||validator.equals(req.params.md, 'less')) {
 		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE Humanity < ' + connection.escape(req.params.humanity) + ' AND Alive = 1 ORDER BY Humanity ASC LIMIT 50;', function(err, rows) {
 			if (err) {
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+					message: txt.errors.error
 				});
 			} else {
 				res.render('player/players', {
@@ -200,12 +211,131 @@ app.get('/players/find/humanity/:md/:humanity/', function(req, res){
 	}
 
 });
+app.get('/players/find/murders/:md/:kills', function(req, res){
+	if (validator.equals(req.params.md, 'g')||validator.equals(req.params.md, 'greater')) {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE KillsH > ' + connection.escape(req.params.kills) + ' AND Alive = 1 ORDER BY KillsH DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: txt.errors.error
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	} else if (validator.equals(req.params.md, 'l')||validator.equals(req.params.md, 'less')) {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE KillsH < ' + connection.escape(req.params.kills) + ' AND Alive = 1 ORDER BY KillsH DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: txt.errors.error
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	} else {
+		res.redirect('/players/find/advanced');
+	}
+});
+app.get('/players/find/bandits/:md/:kills', function(req, res) {
+	if (validator.equals(req.params.md, 'g')||validator.equals(req.params.md, 'greater')) {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE KillsB > ' + connection.escape(req.params.kills) + ' AND Alive = 1 ORDER BY KillsB DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: txt.errors.error
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	} else if (validator.equals(req.params.md, 'l')||validator.equals(req.params.md, 'less')) {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE KillsB < ' + connection.escape(req.params.kills) + ' AND Alive = 1 ORDER BY KillsB DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: txt.errors.error
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	}
+});
+app.get('/players/find/zombies/:md/:kills', function(req, res) {
+	if (validator.equals(req.params.md, 'g')||validator.equals(req.params.md, 'greater')) {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE KillsZ > ' + connection.escape(req.params.kills) + ' AND Alive = 1 ORDER BY KillsZ DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: txt.errors.error
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	} else if (validator.equals(req.params.md, 'l')||validator.equals(req.params.md, 'less')) {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE KillsZ < ' + connection.escape(req.params.kills) + ' AND Alive = 1 ORDER BY KillsZ DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: txt.errors.error
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	}
+});
 
 /** Authentication Required Routes **/
 app.get('/map', loggedIn, function(req, res) {
 
 	res.render('application/map', {
 		user: req.user
+	});
+
+});
+app.get('/clans', loggedIn, function(req, res) {
+
+	connection.query("SELECT Player_DATA.PlayerName as PlayerName, clans.Name as ClanName, clans.id as ClanID, Player_DATA.PlayerUID as PlayerUID FROM clans LEFT JOIN Player_DATA ON (clans.FounderUID = Player_DATA.PlayerUID)", function(err, rows){
+		if (err) {
+			console.log("Query Error: " + err);
+			res.render('application/error', {
+				code: 500,
+				message: txt.errors.error
+			});
+		} else {
+			res.render('clans/clans', {
+				clans: rows,
+				user: req.user
+			});
+		}
 	});
 
 });
@@ -216,13 +346,13 @@ app.get('/map', loggedIn, function(req, res) {
 app.get('/404', function(req, res) {
 	res.render('application/error', {
 		code: 404,
-		message: 'The page you are looking for could not be found.'
+		message: txt.errors.notfound
 	});
 });
 app.get("/401", function(req, res) {
 	res.render("application/error", {
 		code: 401,
-		message: "You are not authorized to access to resource you are requesting. This security incident has been logged."
+		message: txt.errors.forbidden
 	});
 });
 
@@ -252,4 +382,13 @@ var server = app.listen(port, function() {
 function loggedIn(req, res, next) {
 	if (req.isAuthenticated()) { return next(); }
 	res.redirect('/login');
+}
+
+function isSiteStaff(req, res, next) {
+	if (req.isAuthenticated) {
+		if (validator.isin(req.user._json.response.players.steamid, Staff)) {
+			return next();
+		}
+	}
+	res.redirect('/401');
 }

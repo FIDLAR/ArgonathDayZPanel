@@ -12,8 +12,10 @@
     "flash": "^1.1.0",
     "hbs": "~2.8.0",
     "moment": "^2.9.0",
+    "morgan": "^1.5.1",
     "mysql": "~2.5.4",
     "passport": "^0.2.1",
-    "passport-steam": "^0.1.4"
+    "passport-steam": "^0.1.4",
+    "validator": "^3.32.0"
   }
 }
