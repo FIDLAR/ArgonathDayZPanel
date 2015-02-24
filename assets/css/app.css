@@ -1,0 +1,18 @@
+html {
+	background: url('/img/bg.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+img.border {
+	border: 1px solid #556270;
+}
+
+/*** CSS OVERRIDES ***/
+
+/* Remove annoying space after hyper-links on cards */
+.card a { 
+    	margin-right: 0px;  
+}

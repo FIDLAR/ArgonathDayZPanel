@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content ">
+				<h5 class="center-align grey-text text-darken-3">Welcome to the DayZ Panel</h5>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s8">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-3">DayZ Panel!</span>
+				<p class="grey-text text-darken-3">Hey{{#if user}} {{user._json.personaname}}{{/if}}! Thanks for using the DayZ panel by ArgnathRPG. This panel is currently in the development stages and may occasionally not work correctly. We will be constantly making updates to this panel so simply make it as awesome as we can. Think you can help? If you have JavaScript skills feel free to checkout our <a href="https://github.com/derekmartinez18/ArgonathDayZPanel">Github</a> repo and make some contributions! Don't worry if you can't, we'll get by sooner or later!</p><br />
+				<p class="grey-text text-darken-3">If you encounter any problems please reply on the topic (<a href="http://www.argonathrpg.eu/index.php?topic=108647.0">here</a>) or contact [WS]Teddy directly for any security or emergency concerns. Any other questions, suggestions, or comments can also be left directly on the topic. Please refrain from using GitHub issues on this project as keeping everything centralized on the forums is much simpler.</p>
+			</div>
+		</div>
+	</div>
+	<div class="col s4">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-3">Quick Links</span>
+				<div class="collection">
+					<a href="/players/find/humanity/l/-5000" class="collection-item">Bandits</a>
+					<a href="/players/find/humanity/g/5000" class="collection-item">Heroes</a>
+					{{#if user}}
+					<a href="/player/{{user._json.steamid}}" class="collection-item">My Statistics</a>
+					{{/if}}
+					<!--<a href="#" class="collection-item"></a>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

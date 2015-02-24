@@ -11,6 +11,7 @@ var moment 		= require('moment');
 var secretConf		= require('./hidden/secret.js');
 var SteamStrategy	= require('passport-steam').Strategy;
 var mysql      		= require('mysql');
+var http		= require('http');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -29,6 +30,15 @@ app.locals.name = "DayZ Panel";
 app.locals.year = moment().year();
 
 var connection = mysql.createConnection(secretConf.connection);
+connection.connect(function(err) {
+	if (err) {
+		console.log("Couldn't connect to " + secretConf.connection.host + ": " + err.message);
+		console.log("Application will exit as a MySQL database connection is required.");
+		process.exit();
+	} else {
+		console.log("MySQL Database connection established to " + secretConf.connection.host + ".");
+	}
+});
 
 passport.serializeUser(function(user, done) {
 	done(null, user);
@@ -44,18 +54,26 @@ passport.use(new SteamStrategy({
     apiKey: secretConf.steam.key
   },
   function(identifier, profile, done) {
-    // asynchronous verification, for effect...
     process.nextTick(function () {
-
-      // To keep the example simple, the user's Steam profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Steam account with a user record in your database,
-      // and return that user instead.
       profile.identifier = identifier;
       return done(null, profile);
     });
   }
 ));
+
+/** 
+ * Runtime Error Handlers
+ */
+connection.on('error', function(err) {
+	if (err.code == 'PROTOCOL_CONNECTION_LOST') {
+		console.log("Database connection was lost. Process will abort.");
+		process.exit();
+	} else if (err.code == 'ECONNREFUSED') {
+		console.log("Database refused connectivity. Process will abort.");
+		process.exit();
+	}
+	console.log("[Query] Error(" + err.code + "): " + err.message);
+});
 
 /**
  * HBS Helpers
@@ -67,16 +85,16 @@ hbs.registerHelper('formatTime', function(oldTime) {
 });
 
 app.get('/', function(req, res) {
-
 	res.render('home/index', {
 		user: req.user
 	});
-
 });
 
 /** Passport & Authentication Routes  **/
 app.get('/login', function(req, res) {
-
+	res.render('application/login', {
+		user: req.user
+	});
 });
 app.get('/logout', function(req, res) {
 	req.logout();
@@ -89,6 +107,99 @@ app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: 
 	res.redirect('/');
 });
 
+/** Player Search Algorithm Routes */
+app.get('/players/find/basic', function(req, res) {
+	res.render('search/basic', {
+		user: req.user
+	});
+});
+app.get('/players/find/advanced', function(req, res) {
+	res.render('search/advanced', {
+		user: req.user
+	});
+});
+app.post('/search/basic', function(req, res){
+	console.log("REDIRECT" + '/players/find/name/' + req.body.val);
+	res.redirect('/players/find/name/' + req.body.val);
+});
+app.post('/search/advanced', function(req, res) {
+	console.log("REDIRECT "+ '/players/find/' + req.body.object + '/' + req.body.condition + '/' + req.body.val);
+	res.redirect('/players/find/' + req.body.object + '/' + req.body.condition + '/' + req.body.val);
+});
+app.get('/player/:id', function(req, res) {
+	http.get("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + secretConf.steam.key + "&steamids=" + req.params.id, function(reply) {
+		reply.on('data', function(data){
+			var jData = JSON.parse(data);
+			connection.query("SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Character_DATA.LastLogin as LastLogin, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE Character_DATA.Alive = 1 AND Player_DATA.PlayerUID = " + connection.escape(req.params.id), function(err, rows) {
+				res.render('player/player', {
+					player: jData,
+					db: rows[0],
+					user: req.user
+				});
+			});
+		});
+		reply.on('error', function(err) {
+			res.render('application/error', {
+				code: 500,
+				message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+			});
+		});
+	});
+});
+app.get('/players/find/name/:name', function(req, res) {
+	connection.query("SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE Character_DATA.Alive = 1 AND Player_DATA.PlayerName LIKE " + connection.escape("%" + req.params.name + "%") + ";", function(err, rows){
+		if (err) {
+			console.log("Query Error: " + err);
+			res.render('application/error', {
+				code: 500,
+				message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+			});
+		} else {
+			res.render('player/players', {
+				players: rows,
+				user: req.user
+			});
+		}
+	});
+
+});
+app.get('/players/find/humanity/:md/:humanity/', function(req, res){
+	console.log(req.params);
+	if (req.params.md == 'g' || req.params.md == 'greater') {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE Humanity > ' + connection.escape(req.params.humanity) + ' AND Alive = 1 ORDER BY Humanity DESC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	} else if (req.params.md == 'l' || req.params.md == 'less') {
+		connection.query('SELECT Character_DATA.PlayerUID as PlayerUID, Character_DATA.KillsH as Murders, Character_DATA.KillsB as Bandits, Character_DATA.KillsZ as Zombies, Character_DATA.Humanity as Humanity, Player_DATA.PlayerName as Name FROM Character_DATA LEFT JOIN Player_DATA ON (Character_DATA.PlayerUID = Player_DATA.PlayerUID) WHERE Humanity < ' + connection.escape(req.params.humanity) + ' AND Alive = 1 ORDER BY Humanity ASC LIMIT 50;', function(err, rows) {
+			if (err) {
+				console.log("Query Error: " + err);
+				res.render('application/error', {
+					code: 500,
+					message: 'Oh gosh! Something has gone wrong! A highly trained team of engineer monkeys will be dispatched immediately!'
+				});
+			} else {
+				res.render('player/players', {
+					players: rows,
+					user: req.user
+				});
+			}
+		});
+	} else {
+		res.redirect('/players/find/advanced');
+	}
+
+});
 
 /** Authentication Required Routes **/
 app.get('/map', loggedIn, function(req, res) {

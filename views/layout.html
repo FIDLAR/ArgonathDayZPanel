@@ -3,6 +3,7 @@
 	<title>{{@name}}</title>
 
 	<link rel="stylesheet" type="text/css" href="/css/materialize.css">
+	<link rel="stylesheet" type="text/css" href="/css/app.css">
 
 	<!-- Leaflet (Maps) -->
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
@@ -10,20 +11,51 @@
 </head>
 <body>
 
-	<header></header>
+	<header>
+		<nav class="black" role='navigation'>
+			<div class="nav-wrapper container">
+				<a href="/" class="brand-logo">ArgonathDayZ</a>
+				<ul class="right right hide-on-med-and-down">
+					<li><a href="/">Home</a></li>
+					{{#if user}}
+					<li><a href="/logout">Logout</a></li>
+					{{^}}
+					<li><a href="/login">Login</a></li>
+					{{/if}}
+				</ul>
+			</div>
+		</nav>
+	</header>
 
 	<main>
 		<div class="container">
 			{{{body}}}
+			<div class="row">
+				<div class="col s12">
+					<div class="card-panel">
+						<p class="center-align grey-text text-darken-3">&copy; Copyright 2015 ArgonathRPG. | <a target="_new" href="http://steampowered.com">Powered by Steam.</a></p>
+					</div>
+				</div>
+			</div>
 		</div>
 
 	</main>
+	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+		<a class="btn-floating btn-large red">
+	      		<i class="mdi-navigation-apps"></i>
+	    	</a>
+		<ul>
+	      		<li><a href="/players/find/basic" class="btn-floating cyan"><i class="mdi-action-search"></i></a></li>
+	      		<li><a href="/map" class='btn-floating green'><i class="mdi-maps-navigation"></i></a></li>
+	   	</ul>
+	  </div>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="/js/materialize.js"></script>
 	<script type="text/javascript" src="/js/leaflet.js"></script>
 	<script type="text/javascript" src="/js/map.js"></script>
 	<script type="text/javascript" src="/js/site/alert-handler.js"></script>
+	<script type="text/javascript" src="/js/site/app.js"></script>
 
 </body>
 </html>
