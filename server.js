@@ -153,7 +153,8 @@ app.get('/player/:id', function(req, res) {
 		reply.on('error', function(err) {
 			res.render('application/error', {
 				code: 500,
-				message: txt.errors.error
+				message: txt.errors.error,
+				user: req.user
 			});
 		});
 	});
@@ -164,7 +165,8 @@ app.get('/players/find/name/:name', function(req, res) {
 			console.log("Query Error: " + err);
 			res.render('application/error', {
 				code: 500,
-				message: txt.errors.error
+				message: txt.errors.error,
+				user: req.user
 			});
 		} else {
 			res.render('player/players', {
@@ -182,7 +184,8 @@ app.get('/players/find/humanity/:md/:humanity/', function(req, res){
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -197,7 +200,8 @@ app.get('/players/find/humanity/:md/:humanity/', function(req, res){
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -218,7 +222,8 @@ app.get('/players/find/murders/:md/:kills', function(req, res){
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -233,7 +238,8 @@ app.get('/players/find/murders/:md/:kills', function(req, res){
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -253,7 +259,8 @@ app.get('/players/find/bandits/:md/:kills', function(req, res) {
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -268,7 +275,8 @@ app.get('/players/find/bandits/:md/:kills', function(req, res) {
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -287,6 +295,7 @@ app.get('/players/find/zombies/:md/:kills', function(req, res) {
 				res.render('application/error', {
 					code: 500,
 					message: txt.errors.error
+					,user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -301,7 +310,8 @@ app.get('/players/find/zombies/:md/:kills', function(req, res) {
 				console.log("Query Error: " + err);
 				res.render('application/error', {
 					code: 500,
-					message: txt.errors.error
+					message: txt.errors.error,
+					user: req.user
 				});
 			} else {
 				res.render('player/players', {
@@ -328,7 +338,8 @@ app.get('/clans', loggedIn, function(req, res) {
 			console.log("Query Error: " + err);
 			res.render('application/error', {
 				code: 500,
-				message: txt.errors.error
+				message: txt.errors.error,
+				user: req.user
 			});
 		} else {
 			res.render('clans/clans', {
@@ -346,13 +357,15 @@ app.get('/clans', loggedIn, function(req, res) {
 app.get('/404', function(req, res) {
 	res.render('application/error', {
 		code: 404,
-		message: txt.errors.notfound
+		message: txt.errors.notfound,
+		user: req.user
 	});
 });
 app.get("/401", function(req, res) {
 	res.render("application/error", {
 		code: 401,
-		message: txt.errors.forbidden
+		message: txt.errors.forbidden,
+		user: req.user
 	});
 });
 
