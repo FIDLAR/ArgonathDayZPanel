@@ -17,6 +17,7 @@ var morgan 		= require('morgan');
 var fs 			= require('fs');
 var txt			= require('./helpers/text.js');
 var sanitize 		= require('sanitize-caja');
+var settings 		= require('./config/settings.js');
 
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
 
@@ -37,6 +38,7 @@ hbs.localsAsTemplateData(app);
 /** Variables and Stuff **/
 app.locals.name = "DayZ Panel";
 app.locals.year = moment().year();
+
 var Staff = Array(
 	76561198020571124, // Teddy
 	76561197983293052, // Chase
@@ -63,8 +65,8 @@ passport.deserializeUser(function(obj, done) {
 });
 
 passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:3000/auth/steam/return',
-    realm: 'http://localhost:3000/',
+    returnURL: 'http://' + settings.host.domain + '/auth/steam/return',
+    realm: 'http://' + settings.host.domain + '/',
     apiKey: secretConf.steam.key
   },
   function(identifier, profile, done) {
@@ -371,12 +373,12 @@ app.get('/clan/:id', loggedIn, function(req, res){
 	});
 });
 app.get('/clan/create', loggedIn, function(req, res) {
-	res.render('clans/create' {
+	res.render('clans/create', {
 		user: req.user
 	});
 });
 app.post('/clan/create', loggedIn, function(req, res) {
-	
+
 });
 
 /**
