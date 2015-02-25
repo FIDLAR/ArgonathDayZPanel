@@ -30,10 +30,19 @@ jQuery(document).ready(function($) {
 	$('#map').height($( window ).height());
 });
 
-function onMapClick(e) {
-	console.log("You clicked the map at " + e.latlng);
-}
+var dynamicMarkers;
+var socket = io.connect("http://localhost:3035");
+
+socket.on("mapData", function(data) {
+	L.marker([data.lat, data.lng]).addTo(map);
+});
 
 
 
-map.on('click', onMapClick);
+map.on('click', function(e){
+	var jData = {
+		"lat": e.latlng.lat,
+		"lng": e.latlng.lng
+	}
+	socket.emit('mapClick', jData);
+});

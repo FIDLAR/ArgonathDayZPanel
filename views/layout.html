@@ -1,13 +1,12 @@
 <html>
 <head>
-	<title>{{name}}</title>
+	<title>{{Title}}</title>
 
-	<link rel="stylesheet" type="text/css" href="/css/materialize.css">
-	<link rel="stylesheet" type="text/css" href="/css/app.css">
-
+	<link rel="stylesheet" type="text/css" href="/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/app.min.css">
 	<!-- Leaflet (Maps) -->
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-	<link rel="stylesheet" type="text/css" href="/css/map.css">
+	<link rel="stylesheet" href="/css/leaflet.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/map.min.css">
 </head>
 <body>
 
@@ -34,7 +33,7 @@
 			<div class="row">
 				<div class="col s12">
 					<div class="card-panel">
-						<p class="center-align grey-text text-darken-3">&copy;Copyright {{year}} ArgonathRPG. | <a target="_new" href="http://steampowered.com">Powered by Steam.</a></p>
+						<p class="center-align grey-text text-darken-3">&copy;Copyright {{Year}} ArgonathRPG. | <a target="_new" href="http://steampowered.com">Powered by Steam.</a></p>
 					</div>
 				</div>
 			</div>
@@ -52,11 +51,13 @@
 	  </div>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="/js/materialize.js"></script>
-	<script type="text/javascript" src="/js/leaflet.js"></script>
-	<script type="text/javascript" src="/js/map.js"></script>
-	<script type="text/javascript" src="/js/site/alert-handler.js"></script>
-	<script type="text/javascript" src="/js/site/app.js"></script>
-
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/js/materialize.min.js"></script>
+	{{#if map}}
+	<script type="text/javascript" src="/js/leaflet.min.js"></script>
+	<script type="text/javascript" src="/js/map.min.js"></script>
+	{{/if}}
+	<script type="text/javascript" src="/js/alert-handler.min.js"></script>
+	<script type="text/javascript" src="/js/app.min.js"></script>
 </body>
 </html>

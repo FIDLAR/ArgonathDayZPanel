@@ -28,3 +28,7 @@ node_modules
 
 # Block Secure Files
 hidden
+
+# Redundant directories
+assets/css
+assets/js

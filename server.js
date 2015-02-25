@@ -18,6 +18,7 @@ var fs 			= require('fs');
 var txt			= require('./helpers/text.js');
 var sanitize 		= require('sanitize-caja');
 var settings 		= require('./config/settings.js');
+var io			= require('socket.io').listen(3035);
 
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
 
@@ -35,15 +36,14 @@ app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 hbs.localsAsTemplateData(app);
 
-/** Variables and Stuff **/
-app.locals.name = "DayZ Panel";
-app.locals.year = moment().year();
-
-var Staff = Array(
-	76561198020571124, // Teddy
-	76561197983293052, // Chase
-	76561198015523313 // African
-);
+/**
+ * Sockets
+ */
+io.on('connection', function(socket) {
+	socket.on("mapClick", function(data){
+		socket.emit('userAlert', "Sorry, this feature isn't yet available.");
+	});
+});
 
 var connection = mysql.createConnection(secretConf.connection);
 connection.connect(function(err) {
@@ -102,7 +102,6 @@ hbs.registerHelper('formatTime', function(oldTime) {
 hbs.registerHelper('cleanHTML', function(data) {
 	return sanitize(data);
 });
-
 app.get('/', function(req, res) {
 	res.render('home/index', {
 		user: req.user
@@ -331,10 +330,11 @@ app.get('/players/find/zombies/:md/:kills', function(req, res) {
 });
 
 /** Authentication Required Routes **/
-app.get('/map', loggedIn, function(req, res) {
+app.get('/map', function(req, res) {
 
 	res.render('application/map', {
-		user: req.user
+		user: req.user,
+		map: true
 	});
 
 });
@@ -415,9 +415,9 @@ app.use(function(err, req, res, next) {
 	res.redirect("/404");
 });
 
-var server = app.listen(port, function() {
+var hostServer = app.listen(port, function() {
 
-	var host = server.address().address
+	var host = this.address().address
 
 	console.log("Application is running at http://%s:%s", host, port);
 });
