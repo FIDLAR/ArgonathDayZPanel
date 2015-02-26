@@ -1,3 +1,17 @@
+var shopIcon = L.icon({
+	iconUrl: '../map/markers/supermarket.png',
+	iconSize: [32, 27],
+	iconAnchor: [16, 13.5],
+	popupAnchor: [0, 0]
+});
+
+var aircraftIcon = L.icon({
+	iconUrl: '../map/markers/airport.png',
+	iconSize: [32, 27],
+	iconAnchor: [16, 13.5],
+	popupAnchor: [0, 0]
+});
+
 var map = L.map('map', {
 	maxZoom: 13,
 	minZoom: 13
@@ -11,9 +25,9 @@ L.tileLayer('/map/{z}/map_{x}_{y}.png', {
 	attribution: 'Map data from ctc-gaming'
 }).addTo(map);
 
-var sabinaTrader = L.marker([85.04142, -179.89434]).addTo(map);
-var sabinaAircraftDealer = L.marker([85.04197, -179.88559]).addTo(map);
-var heroTrader = L.marker([85.04554, -179.89348]).addTo(map);
+var sabinaTrader = L.marker([85.04142, -179.89434], {icon: shopIcon}).addTo(map);
+var sabinaAircraftDealer = L.marker([85.04197, -179.88559], {icon: aircraftIcon}).addTo(map);
+var heroTrader = L.marker([85.04554, -179.89348], {icon: shopIcon}).addTo(map);
 
 
 sabinaTrader.bindPopup("Sabina Trader City");
@@ -36,8 +50,6 @@ var socket = io.connect("http://localhost:3035");
 socket.on("mapData", function(data) {
 	L.marker([data.lat, data.lng]).addTo(map);
 });
-
-
 
 map.on('click', function(e){
 	var jData = {
