@@ -1,6 +1,6 @@
 module.exports = {
 	'host': {
-		'domain': 'localhost:3000',
+		'domain': 'localhost',
 		'IP': '0.0.0.0'
 	},
 	'port': '3000'

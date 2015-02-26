@@ -1,7 +1,7 @@
 module.exports = {
 	'host': {
-		'domain': 'dayz.argonathrpg.com',
-		'IP': '188.165.158.113'
+		'domain': 'localhost:3000',
+		'IP': '127.0.0.1'
 	},
 	'port': '3000'
 };

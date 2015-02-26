@@ -36,6 +36,8 @@ app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 hbs.localsAsTemplateData(app);
 
+var maintenance = true;
+
 /**
  * Sockets
  */
@@ -102,6 +104,16 @@ hbs.registerHelper('formatTime', function(oldTime) {
 hbs.registerHelper('cleanHTML', function(data) {
 	return sanitize(data);
 });
+
+app.use(function(req, res, next) {
+
+	if (maintenance && req.url != '/maintenance') {
+		res.redirect('/maintenance');
+	}
+	next();
+
+});
+
 app.get('/', function(req, res) {
 	res.render('home/index', {
 		user: req.user
@@ -395,6 +407,12 @@ app.get("/401", function(req, res) {
 	res.render("application/error", {
 		code: 401,
 		message: txt.errors.forbidden,
+		user: req.user
+	});
+});
+app.get('/maintenance', function(req, res) {
+	res.render('application/maintenance', {
+		message: txt.errors.maintenance,
 		user: req.user
 	});
 });

@@ -11,6 +11,7 @@
     "express-session": "^1.10.3",
     "flash": "^1.1.0",
     "hbs": "~2.8.0",
+    "maintenance": "0.0.2",
     "moment": "^2.9.0",
     "morgan": "^1.5.1",
     "mysql": "~2.5.4",
